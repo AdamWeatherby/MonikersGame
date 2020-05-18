@@ -21,15 +21,19 @@
 
 	<h1 align = "center">Pseudonym</h1></br></br>
 
-
-	<div id ="number input" align="center">
-		<label for="quantity"># of Players</label>
-		<input type="number" id="quantity" name="quantity" min="1" max="10">	
+	<div  align="center">
+		<input type="number" id="playerCount">
 	</div>
 
 	<div id = "buttons" style= "width:100%; height:100%"align="center">
-		<a href = "./start" id = "playerCountButton" >Enter</a>
+		<button onclick=playerCounter() type="button">Enter</button>
 	</div>
-
+	
+	
+	<script>
+	function playerCounter() {
+	window.location.href = "./start?p="+document.getElementById("playerCount").value;
+	}
+	</script>
 </body>
 </html>
