@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template
+from flask import request
 
 app = Flask(__name__)
 
@@ -9,4 +10,7 @@ def home_page():
 
 @app.route('/start')
 def start():
-	return "Start Game"
+	print(request.args)
+	numberOfPlayers = request.args.get('p', default = 2, type = int)
+	print(numberOfPlayers)
+	return "Start game with " + str(numberOfPlayers) + " players"
