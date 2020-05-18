@@ -4,6 +4,7 @@ from flask import request
 
 import requests
 import random
+import json
 
 app = Flask(__name__)
 
@@ -19,7 +20,7 @@ def start():
 
 	numberOfCards = 10 * numberOfPlayers
 
-	cardsDict = []
+	cardsTitles = []
 
 	S = requests.Session()
 
@@ -39,7 +40,25 @@ def start():
 
 	for i in range(0, numberOfCards):
 		index = random.randint(2, 499)
-		cardsDict.append(MOSTVIEWED[index]["title"])
+		cardsTitles.append(MOSTVIEWED[index]["title"])
 		print(MOSTVIEWED[index]["title"])
 
+
+	cardsDict = {}
+	for title in cardsTitles:
+		PARAMS = {
+			"action": "query",
+			"format": "json",
+			"prop": "extracts",
+			"titles": title,
+			"exsentences": "5",
+			"exlimit": "1",
+			"explaintext": "1",
+			"formatversion": "2"
+		}
+		R = S.get(url=URL, params=PARAMS)
+		DATA = R.json()
+
+		description = DATA["query"]["pages"][0]["extract"]
+		cardsDict[title] = description
 	return "Start game with " + str(numberOfPlayers) + " players"
