@@ -8,6 +8,12 @@ import json
 
 app = Flask(__name__)
 
+class Card:
+	def __init__(self, title, description, value):
+		self.title = title
+		self.description = description
+		self.value = value
+
 @app.route('/')
 def home_page():
 	return render_template("index.html")
@@ -40,17 +46,34 @@ def start():
 
 	for i in range(0, numberOfCards):
 		index = random.randint(2, 499)
-		cardsTitles.append(MOSTVIEWED[index]["title"])
-		print(MOSTVIEWED[index]["title"])
+		title = MOSTVIEWED[index]["title"]
+		if(not("list" in title or "user" in title)):
+
+			if(index < 125):
+				score = 1
+			elif(index < 250):
+				score = 2
+			elif(index < 375):
+				score = 3
+			else:
+				score = 4
 
 
-	cardsDict = {}
-	for title in cardsTitles:
+
+			card = Card(title, "", score)
+			cardsTitles.append(card)
+			print(title)
+		else:
+			i = i-1
+
+
+	cards = []
+	for card in cardsTitles:
 		PARAMS = {
 			"action": "query",
 			"format": "json",
 			"prop": "extracts",
-			"titles": title,
+			"titles": card.title,
 			"exsentences": "5",
 			"exlimit": "1",
 			"explaintext": "1",
@@ -60,5 +83,12 @@ def start():
 		DATA = R.json()
 
 		description = DATA["query"]["pages"][0]["extract"]
-		cardsDict[title] = description
+
+		card.description = description
+
+		cards.append(card)
+	
+	for card in cards:
+		print(card.title + "\n" + card.description + "\n" + str(card.value) + "\n")
+		print("\n")
 	return "Start game with " + str(numberOfPlayers) + " players"
