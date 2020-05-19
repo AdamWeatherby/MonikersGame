@@ -80,7 +80,7 @@ def start():
 	for i in range(0, numberOfCards):
 		index = random.randint(2, 499)
 		title = MOSTVIEWED[index]["title"]
-		if(not("list" in title or "user" in title)):
+		if(not("list" in title.lower() or "user" in title.lower())):
 
 			if(index < 125):
 				score = 1
@@ -124,4 +124,5 @@ def start():
 	for card in cards:
 		print(card.title + "\n" + card.description + "\n" + str(card.value) + "\n")
 		print("\n")
-	return "Start game with " + str(numberOfPlayers) + " players"
+
+	return render_template("cards.html", title = cards[0].title, description = cards[0].description, points = str(cards[0].value))
