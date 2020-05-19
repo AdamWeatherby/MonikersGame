@@ -8,6 +8,39 @@ import json
 
 app = Flask(__name__)
 
+runningGame = None
+
+class Game:
+	def __init__(self, cardList, teamOne, teamTwo):
+		self.workingDeck = cardList
+		self.teamOne = teamOne
+		self.teamOneScore = 0
+		self.teamTwo = teamTwo
+		self.teamTwoScore = 0
+		self.teamOneSolved = []
+		self.teamTwoSolved = []
+		self.currentCard = None
+
+	def award_point(self, solvedCard, team):
+		index = -1	
+		for index, card in enumerate(self.workingDeck):
+			if solvedCard.title = card.title:
+				break
+		if index >= len(self.workingDeck):
+			return "Error: Invalid Card"
+
+		addition = self.workingDeck[index]
+		del(self.workingDeck[index])
+
+		if team == self.teamOne:
+			self.teamOneScore += addition.value
+			self.teamOneSolved.append(addition)
+		else:
+			self.teamTwoScore += addition
+			self.teamTwoSolved.append(addition)
+
+
+
 class Card:
 	def __init__(self, title, description, value):
 		self.title = title
