@@ -24,7 +24,7 @@ class Game:
 	def award_point(self, solvedCard, team):
 		index = -1	
 		for index, card in enumerate(self.workingDeck):
-			if solvedCard.title = card.title:
+			if solvedCard.title == card.title:
 				break
 		if index >= len(self.workingDeck):
 			return "Error: Invalid Card"
