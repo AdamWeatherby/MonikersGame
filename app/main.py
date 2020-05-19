@@ -53,9 +53,7 @@ def home_page():
 
 @app.route('/start')
 def start():
-	print(request.args)
 	numberOfPlayers = request.args.get('p', default = 2, type = int)
-	print(numberOfPlayers)
 
 	numberOfCards = 10 * numberOfPlayers
 
@@ -77,11 +75,16 @@ def start():
 
 	MOSTVIEWED = DATA["query"]["mostviewed"]
 
-	for i in range(0, numberOfCards):
+	usedNumbers = []
+	i = 0
+	while i < numberOfCards:
 		index = random.randint(2, 499)
+		if(index in usedNumbers):
+			i = i-1
+			continue
+		usedNumbers.append(index)
 		title = MOSTVIEWED[index]["title"]
 		if(not("list" in title.lower() or "user" in title.lower())):
-
 			if(index < 125):
 				score = 1
 			elif(index < 250):
@@ -98,6 +101,7 @@ def start():
 			print(title)
 		else:
 			i = i-1
+		i += 1
 
 
 	cards = []
