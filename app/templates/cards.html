@@ -14,28 +14,105 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-	
+	<script>
+		var cards = {{ cards | safe }}
+		var numPlayers = cards.length/10;
+		var pickedCards = [];
+		var currentPlayer = 0;
+		var currentCard = 0;
+		var currentPickedCards = 0
+		loadCards();
+
+
+		function nextPlayer() {
+			currentPlayer++;
+			loadCards();
+		}
+
+		function loadCards() {
+			currentCard = 0 + 10 * currentPlayer;
+			document.getElementById('title').innerHTML = cards[currentCard]["title"]
+			document.getElementById('description').innerHTML = cards[currentCard]["description"]
+			document.getElementById('value').innerHTML = cards[currentCard]["value"]
+
+			//disable back button
+		}
+
+		function changeCard(increment) {	
+			if(increment == 1) {
+				if(currentCard % 9 == 0 && currentCard != 0) //disable if last card in stack
+					return;
+				currentCard++;
+				document.getElementById('title').innerHTML = cards[currentCard]["title"]
+				document.getElementById('description').innerHTML = cards[currentCard]["description"]
+				document.getElementById('value').innerHTML = cards[currentCard]["value"]
+			}
+			else {
+				if(currentCard % 10 == 0) //disable if first card in stack
+					return;
+				currentCard--;
+				document.getElementById('title').innerHTML = cards[currentCard]["title"]
+				document.getElementById('description').innerHTML = cards[currentCard]["description"]
+				document.getElementById('value').innerHTML = cards[currentCard]["value"]
+			}
+		}
+
+		function pickCard() {
+			currentPickedCards++;
+			pickedCards.push(currentCard)
+			if(currentPickedCards == 5) {
+				currentPlayer++
+				if(currentPlayer == numPlayers) {
+					//send data to flask and go to game
+				}
+				loadCards();
+			}
+		}
+		
+	</script>
+	<style>
+		.cardOutline {
+			width: 220px;
+			height: 342px; 
+			text-align: center; 
+			padding: 10px; 
+			margin: 10px; 
+			background: #FFF; 
+			border-radius: 10px
+		}
+		.description {
+			width: 220px;
+			height: 342px;
+			overflow-y:auto;
+		}
+	</style>
 </head>
 
 <body style="background-color: #1d3557">
 
 	<div class="jumbotron" style = "background-color: #457b9d; padding-top: 5px; padding-bottom: 5px; border-radius: 5px">
-		</br><h1 align = "center" style = "color: #e63946">Pseudonym</h1></br>
+		<br /><h1 align = "center" style = "color: #e63946">Pseudonym</h1><br />
 	</div>
 
 	
 	<div align="center">
-		<div class= "cardOutline" style = "width: 220px; height: 342px; text-align: center; padding: 10px; margin: 10px; background: #FFF; border-radius: 10px">
-			<div class = "Title">{{ title }}</div>
+		<div class= "cardOutline" >
+			<div class = "title" id="title">{{ title }}</div>
 			<hr />
-			<div>{{ description }}</div>
+			<div class="description" id="description">{{ description }}</div>
 			<br />
-			<div>Value: {{ points }}</div>
+			Value:<div id= "value"> {{ points }}</div><br />
+			<div class="row">
+				<div id="backButtonContainer" class="col-md-6">
+					<button id="backButton" onclick="changeCard(0)">Previous Card</button>
+				</div>
+				<div id="forwardButtonContainer" class="col-md-6">
+					<button id="forwardButton" onclick="changeCard(1)">Next Card</button>
+				</div>
+			</div>
 		</div>
 	</div>
 	
-	<script>
 
-	</script>
 </body>
 </html>

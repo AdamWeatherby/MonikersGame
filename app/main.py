@@ -72,9 +72,9 @@ def start():
 
 	R = S.get(url=URL, params=PARAMS)
 	DATA = R.json()
-
+	print(DATA)
 	MOSTVIEWED = DATA["query"]["mostviewed"]
-
+	print(MOSTVIEWED)
 	usedNumbers = []
 	i = 0
 	while i < numberOfCards:
@@ -93,8 +93,6 @@ def start():
 				score = 3
 			else:
 				score = 4
-
-
 
 			card = Card(title, "", score)
 			cardsTitles.append(card)
@@ -125,8 +123,12 @@ def start():
 
 		cards.append(card)
 	
+	cardsJSList = []
 	for card in cards:
+		cardsJSList.append(card.__dict__)
 		print(card.title + "\n" + card.description + "\n" + str(card.value) + "\n")
 		print("\n")
 
-	return render_template("cards.html", title = cards[0].title, description = cards[0].description, points = str(cards[0].value))
+	cardsJavascriptString = json.dumps(cardsJSList)
+
+	return render_template("cards.html", title = cards[0].title, description = cards[0].description, points = str(cards[0].value), cards = cardsJavascriptString)
