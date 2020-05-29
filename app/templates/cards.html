@@ -73,7 +73,9 @@
 					$.get("/play/" + pickedCards, function(data) {
 						//console.log($.parseJson(data))
 					})
-					window.location.href = "./playGame";
+					setTimeout(function f() {window.location.href = "./playGame";}, 5000)
+
+					
 				} else {
 					nextPlayer();
 				}

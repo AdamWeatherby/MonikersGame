@@ -14,8 +14,83 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script> 
 	<script>
+		var timer = new Timer();
+		//timer.start({countdown: true, startValues: {seconds: 60}});
+		$('#countdownExample .values').html(timer.getTimeValues().toString());
+		timer.addEventListener('secondsUpdated', function (e) {
+			$('#countdownExample .values').html(timer.getTimeValues().toString());
+		});
+		timer.addEventListener('targetAchieved', function (e) {
+			timerEnd();
+		});
+ 
+		function startTimer() {
+			timer.start({countdown: true, startValues: {seconds: 60}});
+		}
         var cards = {{ cards | safe }}
+		var cardsCopy = [...cards]
+		shuffle(cardsCopy)
+		var teamOneScore = 0
+		var teamTwoScore = 0;
+		var currentTeamIsTeamOne = true;
+		var currentCard = 0;
+		var phase = 0;
+		loadCard();
+		function phaseStart() {
+			timer.stop();
+			if(phase == 3) {
+				alert("Team 1: " + teamOneScore + "\n" + "Team 2: " + teamTwoScore )
+				document.body = "Boys Rule Girls Drool"
+			} else {
+				if(phase == 2) {
+					currentTeamIsTeamOne = false;
+					alert("Phase " + (phase+1) + " has begun. Team 2 starts" + "\n"+ "Team 1: " + teamOneScore + "\n" + "Team 2: " + teamTwoScore)
+				} else {
+					currentTeamIsTeamOne = true;
+					alert("Phase " + (phase+1) + " has begun. Team 1 starts" + "\n" + "Team 1: " + teamOneScore + "\n" + "Team 2: " + teamTwoScore )
+				}
+				cardsCopy = [...cards]
+				shuffle(cardsCopy)
+				currentCard = 0
+			}
+		}
+		function loadCard() {
+			document.getElementById('title').innerHTML = cardsCopy[currentCard]["title"]
+			document.getElementById('description').innerHTML = cardsCopy[currentCard]["description"]
+			document.getElementById('value').innerHTML = cardsCopy[currentCard]["value"]
+		}
+
+		function changeCard() {
+			currentCard = (currentCard + 1) % cardsCopy.length
+			if(cardsCopy.length == 0) {
+				//next phase
+				phase++;
+				phaseStart();
+			}
+			loadCard();
+		}
+
+		function shuffle(array) {
+			array.sort(() => Math.random() - 0.5)
+		}
+
+		function score() {
+			if(currentTeamIsTeamOne) {
+				teamOneScore += cards[currentCard]["value"]
+			} else {
+				teamTwoScore += cards[currentCard]["value"]
+			}
+			cardsCopy.splice(currentCard, 1);
+			changeCard();
+		}
+
+		function timerEnd() {
+			currentTeamIsTeamOne = !currentTeamIsTeamOne;
+			alert("Timer ended");
+		}
+
     </script>
 </head>
 
@@ -55,25 +130,25 @@
 		<br /><h1 align = "center" style = "color: #e63946">Pseudonym</h1><br />
 	</div>
 
-	
+	<div id="countdownExample">
+    	<div class="values"></div>
+	</div>
+	<button onclick="startTimer()">Start</button>
 	<div align="center">
 		<div class= "cardOutline" >
 			<div class = "textContent" id = "textContent">
-				<div class = "title" id="title">{{ title }}</div>
-				<div class="description" id="description">{{ description }}</div>
+				<div class = "title" id="title"></div>
+				<div class="description" id="description"></div>
 			</div>
 			<div class = "point" id = "point">
-			Value:<div id= "value">{{ points }}</div><br />
+			Value:<div id= "value"></div><br />
 			</div>
 			<div class="row">
-				<div id="backButtonContainer" class="col-md-4">
-					<button id="backButton" onclick="changeCard(0)">Previous Card</button>
+				<div id="pickCardContainer" class="col-md-6">
+					<button id="pickButton" onclick="score()">Success</button>
 				</div>
-				<div id="pickCardContainer" class="col-md-4">
-					<button id="pickButton" onclick="pickCard()">Select Card</button>
-				</div>
-				<div id="forwardButtonContainer" class="col-md-4">
-					<button id="forwardButton" onclick="changeCard(1)">Next Card</button>
+				<div id="forwardButtonContainer" class="col-md-6">
+					<button id="forwardButton" onclick="changeCard()">Skip</button>
 				</div>
 			</div>
 		</div>

@@ -9,7 +9,7 @@ import json
 app = Flask(__name__)
 
 runningGame = None
-
+editedCardList = None
 class Game:
 	def __init__(self, cardList, teamOne, teamTwo):
 		self.workingDeck = cardList
@@ -137,12 +137,14 @@ def start():
 @app.route('/play/<jsdata>')
 def playGame(jsdata):
 	global runningGame
+	global editedCardList
 	newCardList = []
 	jsdata = jsdata.split(",")
 	for value in jsdata:
 		print(value)
 		newCardList.append(runningGame.workingDeck[int(value)])
 	runningGame.workingDeck = newCardList
+	editedCardList = newCardList
 
 	cardsJSList = []
 	for card in newCardList:
@@ -155,9 +157,10 @@ def playGame(jsdata):
 @app.route('/playGame')
 def playGameReturnRenderTemplate():
 	global runningGame
+	global editedCardList
 
 	cardsJSList = []
-	for card in runningGame.workingDeck:
+	for card in editedCardList:
 		cardsJSList.append(card.__dict__)
 
 	cardsJavascriptString = json.dumps(cardsJSList)
