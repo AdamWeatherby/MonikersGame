@@ -93,8 +93,10 @@
 		.description {
 			width: 48vh;
 			height: 61vh;
-			overflow-y:auto;
 			font-size: 2vh;
+		}
+		.textContent{
+			overflow-y:auto;
 		}
 		::-webkit-scrollbar {
 			width: 0px;
@@ -118,8 +120,10 @@
 	
 	<div align="center">
 		<div class= "cardOutline" >
-			<div class = "title" id="title">{{ title }}</div>
-			<div class="description" id="description">{{ description }}</div>
+			<div class = "textContent" id = "textContent">
+				<div class = "title" id="title">{{ title }}</div>
+				<div class="description" id="description">{{ description }}</div>
+			</div>
 			<div class = "point" id = "point">
 			Value:<div id= "value">{{ points }}</div><br />
 			</div>
