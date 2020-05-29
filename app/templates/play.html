@@ -20,7 +20,7 @@
 		//timer.start({countdown: true, startValues: {seconds: 60}});
 		$('#countdownExample .values').html(timer.getTimeValues().toString());
 		timer.addEventListener('secondsUpdated', function (e) {
-			$('#countdownExample .values').html(timer.getTimeValues().toString());
+			$('#countdownExample .progress').html("<div class='progress-bar progress-bar-danger' align= 'center' role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width:"+((timer.getTimeValues().seconds.toString())/.6)+"%'>"+(timer.getTimeValues().seconds.toString())+"</div>");
 		});
 		timer.addEventListener('targetAchieved', function (e) {
 			timerEnd();
@@ -109,7 +109,7 @@
 		.textContent{
 			overflow-y:auto;
 			width: 48vh;
-			height: 68vh;
+			height: 75vh;
 		}
 		::-webkit-scrollbar {
 			width: 0px;
@@ -131,17 +131,21 @@
 	</div>
 
 	<div id="countdownExample">
+		<div id = "timer"  align = "center"><button onclick="startTimer()">Start</button>
     	<div class="values"></div>
 	</div>
-	<button onclick="startTimer()">Start</button>
+	  <div class="progress">
+	  <div class="progress-bar progress-bar-danger" align= "center" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">60</div>;
+    </div>
+  </div>
 	<div align="center">
 		<div class= "cardOutline" >
 			<div class = "textContent" id = "textContent">
 				<div class = "title" id="title"></div>
 				<div class="description" id="description"></div>
+				Value:<div id= "value"></div><br />
 			</div>
 			<div class = "point" id = "point">
-			Value:<div id= "value"></div><br />
 			</div>
 			<div class="row">
 				<div id="pickCardContainer" class="col-md-6">
