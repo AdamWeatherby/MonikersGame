@@ -8,8 +8,11 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<meta name="viewport" content="width=device-width, initial-scale=1" /> 
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script
+	src="https://code.jquery.com/jquery-3.5.1.js"
+	integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+	crossorigin="anonymous"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	<script>
 		var cards = {{ cards | safe }}
@@ -17,12 +20,15 @@
 		var pickedCards = [];
 		var currentPlayer = 0;
 		var currentCard = 0;
-		var currentPickedCards = 0
+		var currentPickedCards = 0;
+		var minCard = 0;
+		var maxCard = 9;
 		loadCards();
 
 
 		function nextPlayer() {
-			currentPlayer++;
+			minCard += 10;
+			maxCard += 10;
 			loadCards();
 		}
 
@@ -37,7 +43,7 @@
 
 		function changeCard(increment) {	
 			if(increment == 1) {
-				if(currentCard % 9 == 0 && currentCard != 0) //disable if last card in stack
+				if(currentCard == maxCard) //disable if last card in stack
 					return;
 				currentCard++;
 				document.getElementById('title').innerHTML = cards[currentCard]["title"]
@@ -45,7 +51,7 @@
 				document.getElementById('value').innerHTML = cards[currentCard]["value"]
 			}
 			else {
-				if(currentCard % 10 == 0) //disable if first card in stack
+				if(currentCard == minCard) //disable if first card in stack
 					return;
 				currentCard--;
 				document.getElementById('title').innerHTML = cards[currentCard]["title"]
@@ -60,11 +66,17 @@
 			currentPickedCards++;
 			pickedCards.push(currentCard)
 			if(currentPickedCards == 5) {
+				currentPlayer++;
 				currentPickedCards = 0;
 				if(currentPlayer == numPlayers) {
 					//send data to flask and go to game
+					$.get("/play/" + pickedCards, function(data) {
+						//console.log($.parseJson(data))
+					})
+					window.location.href = "./playGame";
+				} else {
+					nextPlayer();
 				}
-				nextPlayer();
 			}
 		}
 		

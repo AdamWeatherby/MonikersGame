@@ -53,6 +53,7 @@ def home_page():
 
 @app.route('/start')
 def start():
+	global runningGame
 	numberOfPlayers = request.args.get('p', default = 2, type = int)
 
 	numberOfCards = 10 * numberOfPlayers
@@ -80,7 +81,6 @@ def start():
 	while i < numberOfCards:
 		index = random.randint(2, 499)
 		if(index in usedNumbers):
-			i = i-1
 			continue
 		usedNumbers.append(index)
 		title = MOSTVIEWED[index]["title"]
@@ -98,7 +98,7 @@ def start():
 			cardsTitles.append(card)
 			print(title)
 		else:
-			i = i-1
+			continue
 		i += 1
 
 
@@ -131,4 +131,34 @@ def start():
 
 	cardsJavascriptString = json.dumps(cardsJSList)
 
+	runningGame = Game(cards, "Team 1", "Team 2")
 	return render_template("cards.html", title = cards[0].title, description = cards[0].description, points = str(cards[0].value), cards = cardsJavascriptString)
+
+@app.route('/play/<jsdata>')
+def playGame(jsdata):
+	global runningGame
+	newCardList = []
+	jsdata = jsdata.split(",")
+	for value in jsdata:
+		print(value)
+		newCardList.append(runningGame.workingDeck[int(value)])
+	runningGame.workingDeck = newCardList
+
+	cardsJSList = []
+	for card in newCardList:
+		cardsJSList.append(card.__dict__)
+	
+	cardsJavascriptString = json.dumps(cardsJSList)
+
+	return render_template("play.html", cards = cardsJavascriptString)
+
+@app.route('/playGame')
+def playGameReturnRenderTemplate():
+	global runningGame
+
+	cardsJSList = []
+	for card in runningGame.workingDeck:
+		cardsJSList.append(card.__dict__)
+
+	cardsJavascriptString = json.dumps(cardsJSList)
+	return render_template("play.html", cards = cardsJavascriptString)
