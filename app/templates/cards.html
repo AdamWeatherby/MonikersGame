@@ -71,18 +71,25 @@
 	</script>
 	<style>
 		.cardOutline {
-			width: 220px;
-			height: 342px; 
+			width: 48vh;
+			height: 75vh; 
 			text-align: center; 
-			padding: 10px; 
 			margin: 10px; 
 			background: #FFF; 
-			border-radius: 10px
+			border-radius: 1vh
 		}
 		.description {
-			width: 220px;
-			height: 342px;
+			width: 48vh;
+			height: 65vh;
 			overflow-y:auto;
+			font-size: 2vh;
+		}
+		::-webkit-scrollbar {
+			width: 0px;
+			background: transparent; /* make scrollbar transparent */
+		}
+		.title{
+			font-size: 5vh;
 		}
 	</style>
 </head>
@@ -97,10 +104,10 @@
 	<div align="center">
 		<div class= "cardOutline" >
 			<div class = "title" id="title">{{ title }}</div>
-			<hr />
-			<div class="description" id="description">{{ description }}</div>
+			<div class="description" id="description">The COVID-19 pandemic, also known as the coronavirus pandemic, is an ongoing pandemic of coronavirus disease 2019 (COVID‑19), caused by severe acute respiratory syndrome coronavirus 2 (SARS‑CoV‑2).[1] The outbreak was first identified in Wuhan, China, in December 2019.[4][6] However, the first case may be traced back to 17 November, 2019.[7] The World Health Organization declared the outbreak a public health emergency of international concern on 30 January, and a pandemic on 11 March.[8][9] As of 28 May 2020, more than 5.8 million cases of COVID-19 have been reported in more than 188 countries and territories, resulting in more than 359,000 deaths; more than 2.39 million people have recovered.[5] The virus is primarily spread between people during close contact,[c] most often via small droplets produced by coughing,[d] sneezing, and talking.[10][11][13] The droplets usually fall to the ground or onto surfaces rather than travelling through air over long distances.[10] Less commonly, people may become infected by touching a contaminated surface and then touching their face.[10][11] It is most contagious during the first three days after the onset of symptoms, although spread is possible before symptoms appear, and from people who do not show symptoms.[10][11]</div>
 			<br />
-			Value:<div id= "value"> {{ points }}</div><br />
+		</div>
+			Value:<div id= "value">{{ points }}</div><br />
 			<div class="row">
 				<div id="backButtonContainer" class="col-md-4">
 					<button id="backButton" onclick="changeCard(0)">Previous Card</button>
@@ -113,7 +120,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 	
 
 </body>
