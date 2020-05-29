@@ -19,6 +19,36 @@
     </script>
 </head>
 
+	<style>
+		.cardOutline {
+			width: 48vh;
+			height: 75vh; 
+			text-align: center; 
+			margin: 10px; 
+			background: #FFF; 
+			border-radius: 1vh
+		}
+		.description {
+			width: 48vh;
+			height: 61vh;
+			font-size: 2vh;
+		}
+		.textContent{
+			overflow-y:auto;
+		}
+		::-webkit-scrollbar {
+			width: 0px;
+			background: transparent; /* make scrollbar transparent */
+		}
+		.title{
+			font-size: 5vh;
+		}
+		.point{
+			font-size: 2vh;
+		}
+	</style>
+</head>
+
 <body style="background-color: #1d3557">
 
 	<div class="jumbotron" style = "background-color: #457b9d; padding-top: 5px; padding-bottom: 5px; border-radius: 5px">
@@ -28,11 +58,13 @@
 	
 	<div align="center">
 		<div class= "cardOutline" >
-			<div class = "title" id="title"></div>
-			<hr />
-			<div class="description" id="description"></div>
-			<br />
-			Value:<div id= "value"> </div><br />
+			<div class = "textContent" id = "textContent">
+				<div class = "title" id="title">{{ title }}</div>
+				<div class="description" id="description">{{ description }}</div>
+			</div>
+			<div class = "point" id = "point">
+			Value:<div id= "value">{{ points }}</div><br />
+			</div>
 			<div class="row">
 				<div id="backButtonContainer" class="col-md-4">
 					<button id="backButton" onclick="changeCard(0)">Previous Card</button>
@@ -45,8 +77,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	
+	<div>
 
 </body>
 </html>
