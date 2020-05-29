@@ -65,11 +65,14 @@
 			if(currentCard in pickedCards)
 				return;
 			currentPickedCards++;
+			document.getElementById("numCards").innerHTML = currentPickedCards + " Cards Picked"
 			pickedCards.push(currentCard)
 			if(currentPickedCards == 5) {
 				currentPlayer++;
 				currentPickedCards = 0;
+				document.getElementById("numCards").innerHTML = currentPickedCards + " Cards Picked"
 				if(currentPlayer == numPlayers) {
+					
 					//send data to flask and go to game
 					$.get("/play/" + pickedCards, function(data) {
 						//console.log($.parseJson(data))
@@ -120,7 +123,7 @@
 		<br /><h1 align = "center" style = "color: #e63946">Pseudonym</h1><br />
 	</div>
 
-	
+	<div id="numCards">0 Cards Picked</div>
 	<div align="center">
 		<div class= "cardOutline" >
 			<div class = "textContent" id = "textContent">
